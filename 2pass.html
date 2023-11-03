@@ -1,0 +1,164 @@
+<!DOCTYPE html
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="2style.css">
+  <title>Generating Password</title>
+</head>
+<body>
+  <section class="Wrapper">
+    <div class="container">
+      <div class="p-container">
+        <div class="p-header">
+          <div class="p-generator">
+            <div aria-live="polite" contenteditable="true" id="p-generator">Generated Password Here </div>
+            <span>
+              <button title="Copy (ALT + C)" accesskey="c" id="CopyPassword">Copy</button>
+            </span>
+          </div>
+        </div>
+      </div>
+      <table class="p-body">
+        <tr class="form-control">
+          <td class="inputs-data">
+            <label for="length">password length</label>
+          </td>
+          <td class="inputs">
+            <input title="Password length (ALT + L)" accesskey="p" style="text-align:center;" id="length" value="8"
+              min="3" max="15" type="number">
+          </td>
+        </tr>
+        <tr class="form-control">
+          <td class="inputs-data">
+            <label for="upper">Include Uppercase</label>
+          </td>
+          <td class="inputs">
+            <input title="Toggle Uppercase (ALT + U)" accesskey="u" id="upper" type="checkbox">
+          </td>
+        </tr>
+        <tr class="form-control">
+          <td class="inputs-data">
+            <label for="lower">Include lowercase</label>
+          </td>
+          <td class="inputs">
+            <input title="Toggle Lowercase (ALT + L)" accesskey="l" id="lower" checked type="checkbox">
+          </td>
+        </tr>
+        <tr class="form-control">
+          <td class="inputs-data">
+            <label for="number">Include number</label>
+          </td>
+          <td class="inputs">
+            <input title="Toggle Numbers (ALT + N)" accesskey="n" id="number" checked type="checkbox">
+          </td>
+        </tr>
+        <tr class="form-control">
+          <td class="inputs-data">
+            <label for="symbols">Include symbols</label>
+          </td>
+          <td class="inputs">
+            <input title="Toggle Symbols (ALT + S)" accesskey="s" id="symbols" type="checkbox">
+          </td>
+        </tr>
+      </table>
+      <div class="generate-wrapper">
+        <button title="Generate (ALT + G)" accesskey="g" class="generate" id="generate">Generate Password</button>
+      </div>
+    </div>
+  </section>
+</body>
+<script>
+  const PgEL = document.getElementById("p-generator");
+  const CopyEL = document.getElementById("CopyPassword");
+  const lengthEL = document.getElementById("length");
+  const UpperEL = document.getElementById("upper");
+  const LowerEL = document.getElementById("lower");
+  const SymbolsEL = document.getElementById("symbols");
+  const generateEL = document.getElementById("generate");
+  const numberEL = document.getElementById("number");
+
+
+  const UpperLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const LowerLetters = 'abcdefghijklmnopqrstuvwxyz';
+  const numbers = '1234567890'
+  const symbols = '~!@#$%^&*()_+=-|{}[]<>,'
+
+
+  function getLowercase() {
+    return LowerLetters[
+      Math.floor(
+        Math.random() * LowerLetters.length
+      )
+    ];
+  }
+  function getUppercase() {
+    return UpperLetters[
+      Math.floor(
+        Math.random() * UpperLetters.length
+      )
+    ]
+  }
+  function getNumbers() {
+    return numbers[
+      Math.floor(
+        Math.random() * numbers.length
+      )
+    ]
+  }
+  function getSymbols() {
+    return symbols[
+      Math.floor(
+        Math.random() * symbols.length
+      )
+    ]
+  }
+
+
+  function GeneratePassword() {
+    const length = lengthEL.value;
+    let password = "";
+    for (let i = 0; i < length; i++) {
+      const x = generateX();
+      password += x;
+    }
+    PgEL.innerText = password;
+  }
+  function generateX() {
+    const xs = [];
+    if (UpperEL.checked) {
+      xs.push(getUppercase());
+    }
+    if (LowerEL.checked) {
+      xs.push(getLowercase());
+    }
+    if (SymbolsEL.checked) {
+      xs.push(getSymbols());
+    }
+    if (numberEL.checked) {
+      xs.push(getNumbers());
+    }
+    if (xs.length === 0)
+      return "";
+    return xs[Math.floor(Math.random() * xs.length)];
+  }
+  generateEL.addEventListener("click", GeneratePassword);
+  CopyEL.addEventListener("click", () => {
+    const textArea = document.createElement("textarea");
+    const password = PgEL.innerText;
+    if (!password) {
+      return;
+    }
+    textArea.value = password;
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand("Copy");
+    textArea.remove();
+    alert("Copied");
+  });
+</script>
+
+
+</html>
+  >
